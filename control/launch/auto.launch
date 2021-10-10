@@ -45,5 +45,9 @@
     </rosparam>
   </node>
 
+<!--node pkg="rosbag" type="record" 
+        name="bag_record" 
+        args="/vrpn_client_node/car/pose /imu /vesc/sensors/core /vesc/sensors/servo_position_command /vesc/ctrl -o /home/xxx/bagfiles/xcar.bag">
+</node-->
 
 </launch>
