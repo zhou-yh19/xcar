@@ -1,10 +1,10 @@
 <launch>
   <arg name="racecar_version" default="racecar-v2" />
-  <include file="$(find racecar)/launch/vesc2.launch"/>
+  <include file="$(find control)/launch/vesc.launch"/>
 <node pkg="tf" type="static_transform_publisher" name="base_link_to_imu" 
     args="0.0 0.0 0.0 0.0 0.0 0.0 /base_link /imu 100" />
 
-<include file="$(find racecar)/launch/includes/common/sensors.launch.xml">
+<include file="$(find control)/launch/includes/common/sensors.launch.xml">
 <arg name="racecar_version" value="$(arg racecar_version)"/>
 </include>
 

@@ -2,7 +2,7 @@
 <launch>
   <arg name="racecar_version" />
   <arg name="sensors_config"
-       default="$(find racecar)/config/$(arg racecar_version)/sensors.yaml" />
+       default="$(find xcar)/config/$(arg racecar_version)/sensors.yaml" />
 
   <rosparam file="$(arg sensors_config)" command="load" />
 
