@@ -32,7 +32,7 @@ teleop:
         scale: 30.0                  # joystick will command plus or minus 2 meters / second
         offset: 0 #0.10
       -
-        axis: 2
+        axis: 3
         target: control.servo
         scale: 0.34               # joystick will command plus or minus ~20 degrees steering angle
         offset: -0.04021
@@ -51,10 +51,10 @@ teleop:
       -
         axis: 1
         target: control.speed
-        scale: 0.6                  # joystick will command plus or minus 2 meters / second
+        scale: 5.0                  # joystick will command plus or minus 2 meters / second
         offset: 0 #0.10
       -
-        axis: 2
+        axis: 3
         target: control.servo
         scale: 0.68               # joystick will command plus or minus ~20 degrees steering angle
         offset: -0.04021

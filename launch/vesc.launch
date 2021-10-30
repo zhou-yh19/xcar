@@ -8,9 +8,6 @@
       <arg name="xcar_version" value="$(arg xcar_version)" />
     </include>
 
-    <!-- Spawn MUXs -->
-    <include file="$(find xcar)/launch/mux.launch" />
-
     <!-- start electronic speed controller driver :VESC driver-->
     <include file="$(find xcar)/launch/includes/$(arg xcar_version)/vesc.launch.xml" >
       <arg name="xcar_version" value="$(arg xcar_version)" />
