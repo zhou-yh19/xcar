@@ -1,6 +1,6 @@
 joy_node:
   deadzone: 0.01
-  autorepeat_rate: 20
+  autorepeat_rate: 100
   coalesce_interval: 0.01
 
 teleop:
@@ -8,18 +8,12 @@ teleop:
   default:
     type: topic
     is_default: true
-    message_type: vesc_msgs/VescCtrlStamped
-    topic_name: /vesc/ctrl
+    message_type: std_msgs/Bool
+    topic_name: /Safe
     message_value:
       -
-        target: control.mode
-        value: 3
-      -
-        target: control.speed
-        value: 0
-      -
-        target: control.servo
-        value: 0
+        target: data
+        value: false
 
   # Enable Human control by holding Left Bumper
   human_control_a:
@@ -38,7 +32,7 @@ teleop:
         scale: 30.0                  # joystick will command plus or minus 2 meters / second
         offset: 0 #0.10
       -
-        axis: 3
+        axis: 2
         target: control.servo
         scale: 0.34               # joystick will command plus or minus ~20 degrees steering angle
         offset: -0.04021
@@ -57,10 +51,20 @@ teleop:
       -
         axis: 1
         target: control.speed
-        scale: 5                  # joystick will command plus or minus 2 meters / second
+        scale: 0.6                  # joystick will command plus or minus 2 meters / second
         offset: 0 #0.10
       -
-        axis: 3
+        axis: 2
         target: control.servo
         scale: 0.68               # joystick will command plus or minus ~20 degrees steering angle
         offset: -0.04021
+
+  human_control_c:
+    type: topic
+    message_type: std_msgs/Bool
+    topic_name: /Safe
+    deadman_buttons: [0]
+    message_value:
+      -
+        target: data
+        value: true

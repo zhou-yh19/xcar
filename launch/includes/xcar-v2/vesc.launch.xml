@@ -19,6 +19,6 @@
 
   <node pkg="vesc_driver" type="vesc_driver_node" name="vesc_driver" />
   <node pkg="vesc_ackermann" type="vesc_to_odom_node" name="vesc_to_odom" />
-  <node name="throttle2_interpolator" pkg="ackermann_cmd_mux" type="throttle2_interpolator.py" />
+  <node name="cmd_interpolator" pkg="xcar" type="cmd_interpolator.py" />
 
 </launch>
