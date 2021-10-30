@@ -1,5 +1,5 @@
 <launch>
-<arg name="xcar_version" default="xcar-v2" />
+<arg name="xcar_version" default="xcar-v1" />
 
 
 <group ns="vesc">

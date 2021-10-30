@@ -1,5 +1,5 @@
 <launch>
-  <arg name="xcar_version" default="xcar-v2" />
+  <arg name="xcar_version" default="xcar-v1" />
   <include file="$(find xcar)/launch/vesc.launch"/>
   
 <node pkg="tf" type="static_transform_publisher" name="base_link_to_imu" 
