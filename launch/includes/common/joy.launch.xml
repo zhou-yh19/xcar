@@ -1,8 +1,8 @@
 <!-- -*- mode: XML -*- -->
 <launch>
-  <arg name="racecar_version" />
+  <arg name="xcar_version" />
   <arg name="joy_teleop_config"
-       default="$(find xcar)/config/$(arg racecar_version)/joy_xbox360.yaml" />
+       default="$(find xcar)/config/$(arg xcar_version)/joy_xbox360.yaml" />
 
   <rosparam file="$(arg joy_teleop_config)" command="load" />
 
