@@ -32,9 +32,9 @@
     </rosparam>
   </node>
 
-<!--node pkg="rosbag" type="record" 
-        name="bag_record" 
-        args="-a -o /home/data/bagfiles/xcar.bag">
-</node-->
+<node pkg="rosbag" type="record" 
+        name="record" 
+        args="-a -o /home/nvidia/data/bagfiles/xcar.bag">
+</node>
 
 </launch>
