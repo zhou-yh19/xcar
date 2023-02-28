@@ -12,8 +12,17 @@ class InterpolateThrottle:
 
         # Allow our topics to be dynamic.
         # topic name
-        self.rpm_input_topic   = '/vesc/commands/motor/raw_speed'
-        self.rpm_output_topic  = '/vesc/commands/motor/speed'
+        self.rpm_input_topic1   = '/vesc/commands/motor/raw_speed1'
+        self.rpm_output_topic1  = '/vesc/commands/motor/speed1'
+
+        self.rpm_input_topic2   = '/vesc/commands/motor/raw_speed2'
+        self.rpm_output_topic2  = '/vesc/commands/motor/speed2'
+
+        self.rpm_input_topic3   = '/vesc/commands/motor/raw_speed3'
+        self.rpm_output_topic3  = '/vesc/commands/motor/speed3'
+
+        self.rpm_input_topic4   = '/vesc/commands/motor/raw_speed4'
+        self.rpm_output_topic4  = '/vesc/commands/motor/speed4'
 
         self.servo_input_topic   = '/vesc/commands/servo/raw_position'
         self.servo_output_topic  = '/vesc/commands/servo/position'
@@ -46,8 +55,8 @@ class InterpolateThrottle:
 
         # Variables
         self.mode = 0
-        self.last_rpm = 0
-        self.desired_rpm = self.last_rpm
+        self.last_rpm = [0., 0., 0., 0.]
+        self.desired_rpm = [0., 0., 0., 0.]
         
         self.last_servo = rospy.get_param('/vesc/steering_angle_to_servo_offset')
         self.desired_servo_position = self.last_servo
@@ -59,12 +68,18 @@ class InterpolateThrottle:
         rospy.Subscriber('/vesc/commands/motor/mode',Int64,self._process_mode)
         rospy.Subscriber(self.brake_input_topic, Float64, self._process_brake_command)
         rospy.Subscriber(self.current_input_topic, Float64, self._process_current_command)
-        rospy.Subscriber(self.rpm_input_topic, Float64, self._process_throttle_command)
+        rospy.Subscriber(self.rpm_input_topic1, Float64, self._process_throttle_command1)
+        rospy.Subscriber(self.rpm_input_topic2, Float64, self._process_throttle_command2)
+        rospy.Subscriber(self.rpm_input_topic3, Float64, self._process_throttle_command3)
+        rospy.Subscriber(self.rpm_input_topic4, Float64, self._process_throttle_command4)
         rospy.Subscriber(self.servo_input_topic, Float64, self._process_servo_command)
 
         self.brake_output = rospy.Publisher(self.brake_output_topic, Float64,queue_size=1)
         self.current_output = rospy.Publisher(self.current_output_topic, Float64,queue_size=1)
-        self.rpm_output = rospy.Publisher(self.rpm_output_topic, Float64,queue_size=1)
+        self.rpm_output1 = rospy.Publisher(self.rpm_output_topic1, Float64,queue_size=1)
+        self.rpm_output2 = rospy.Publisher(self.rpm_output_topic2, Float64,queue_size=1)
+        self.rpm_output3 = rospy.Publisher(self.rpm_output_topic3, Float64,queue_size=1)
+        self.rpm_output4 = rospy.Publisher(self.rpm_output_topic4, Float64,queue_size=1)
         self.servo_output = rospy.Publisher(self.servo_output_topic, Float64,queue_size=1)
     
         
@@ -96,12 +111,17 @@ class InterpolateThrottle:
             smoothed_current = self.desired_current        
             self.current_output.publish(Float64(smoothed_current))
         elif mode == 3:
-            desired_delta = self.desired_rpm-self.last_rpm
-            clipped_delta = max(min(desired_delta, self.max_delta_rpm), -self.max_delta_rpm)
-            smoothed_rpm = self.last_rpm + clipped_delta
-            self.last_rpm = smoothed_rpm         
+            smoothed_rpm = [0., 0., 0., 0.]
+            for i in range(4):
+                desired_delta = self.desired_rpm[i] - self.last_rpm[i]
+                clipped_delta = max(min(desired_delta, self.max_delta_rpm), -self.max_delta_rpm)
+                smoothed_rpm[i] = self.last_rpm[i] + clipped_delta
+            self.last_rpm = copy.deepcopy(smoothed_rpm)
             # print self.desired_rpm, smoothed_rpm
-            self.rpm_output.publish(Float64(smoothed_rpm))
+            self.rpm_output1.publish(Float64(smoothed_rpm[0]))
+            self.rpm_output2.publish(Float64(smoothed_rpm[1]))
+            self.rpm_output3.publish(Float64(smoothed_rpm[2]))
+            self.rpm_output4.publish(Float64(smoothed_rpm[3]))
 
         # Keep the node alive
     def _run(self):
@@ -120,11 +140,29 @@ class InterpolateThrottle:
         input_current = min(max(input_current, self.min_current), self.max_current)
         self.desired_current = input_current
     
-    def _process_throttle_command(self,msg):
+    def _process_throttle_command1(self,msg):
         input_rpm = msg.data
         # Do some sanity clipping
         input_rpm = min(max(input_rpm, self.min_rpm), self.max_rpm)
-        self.desired_rpm = input_rpm
+        self.desired_rpm[0] = input_rpm
+
+    def _process_throttle_command2(self,msg):
+        input_rpm = msg.data
+        # Do some sanity clipping
+        input_rpm = min(max(input_rpm, self.min_rpm), self.max_rpm)
+        self.desired_rpm[1] = input_rpm
+
+    def _process_throttle_command3(self,msg):
+        input_rpm = msg.data
+        # Do some sanity clipping
+        input_rpm = min(max(input_rpm, self.min_rpm), self.max_rpm)
+        self.desired_rpm[2] = input_rpm
+
+    def _process_throttle_command4(self,msg):
+        input_rpm = msg.data
+        # Do some sanity clipping
+        input_rpm = min(max(input_rpm, self.min_rpm), self.max_rpm)
+        self.desired_rpm[3] = input_rpm
     
     def _process_servo_command(self,msg):
         input_servo = msg.data
